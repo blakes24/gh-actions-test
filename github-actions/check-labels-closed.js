@@ -13,7 +13,7 @@ function main({ g, c }) {
   context = c;
 
   const labels = obtainLabels();
-  console.log(issues);
+  console.log(labels);
 
   if (labels.includes("role: back end/devOps")) {
     return "Done";
