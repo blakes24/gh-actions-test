@@ -14,7 +14,7 @@ jobs:
         with:
           script: |
             const script = require('./github-actions/sort-closed-issues.js')
-            const sortIssues = script({g: github, c: context})
+            const sortIssues = script({c: context})
             return sortIssues
           result-encoding: string
       - uses: alex-page/github-project-automation-plus@v0.8.1

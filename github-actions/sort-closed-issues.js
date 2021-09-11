@@ -1,15 +1,12 @@
 // Global variables
-let github;
 let context;
 
 /**
  * Check the labels of an issue, and return the column the issue should be sorted into when closed
- * @param {Object} g - github object
  * @param {Object} c - context object
  * @returns - returns an object with the action's result, which is passed on to the next action
  */
-function main({ g, c }) {
-  github = g;
+function main({ c }) {
   context = c;
 
   /** if issue includes these labels there should be no visual changes and it should be moved to the Done column */
