@@ -1,4 +1,4 @@
-name: Move Closed Issue
+name: Move Closed Issues
 on:
   issues:
     types:
@@ -14,7 +14,7 @@ jobs:
         with:
           script: |
             const script = require('./github-actions/sort-closed-issues.js')
-            const sortIssues = script({c: context})
+            const sortIssues = script({context})
             return sortIssues
           result-encoding: string
       - uses: alex-page/github-project-automation-plus@v0.8.1
