@@ -11,7 +11,7 @@ function main({ context }) {
     "Feature: Refactor CSS",
     "Feature: Refactor HTML",
     "Feature: Refactor JS / Liquid",
-    "P-Feature: Home page",
+    "Feature: Refactor GHA",
   ];
 
   const labels = obtainLabels(context);
