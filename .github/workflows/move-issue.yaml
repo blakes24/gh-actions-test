@@ -1,9 +1,4 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Move assigned card
+name: Move Closed Issues
 on:
   issues:
     types:
@@ -13,17 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Check Labels on Closed
+      - name: Sort Closed Issues by Label
         uses: actions/github-script@v4
-        id: check-labels-closed
+        id: sort-closed-issues
         with:
           script: |
-            const script = require('./github-actions/check-labels-closed.js')
-            const checkLabels = script({g: github, c: context})
-            return checkLabels
+            const script = require('./github-actions/sort-closed-issues.js')
+            const sortIssues = script({g: github, c: context})
+            return sortIssues
           result-encoding: string
       - uses: alex-page/github-project-automation-plus@5bcba1c1c091a222584d10913e5c060d32c44044
         with:
           project: Project Board
-          column: ${{ steps.check-labels-closed.outputs.result }}
+          column: ${{ steps.sort-closed-issues.outputs.result }}
           repo-token: ${{ secrets.ACCESS_TOKEN }}

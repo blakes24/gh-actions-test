@@ -12,12 +12,23 @@ function main({ g, c }) {
   github = g;
   context = c;
 
-  const labels = obtainLabels();
-  console.log(labels);
+  /** if issue includes these labels there should be no visual changes and it should be moved to the Done column */
+  const doneLabels = [
+    "role: back end",
+    "Feature: Analytics",
+    "Feature: Refactor CSS",
+    "Feature: Refactor JS / Liquid",
+    "P-Feature: Home page",
+  ];
 
-  if (labels.includes("role: back end/devOps")) {
-    return "Done";
+  const labels = obtainLabels();
+
+  for (let label of labels) {
+    if (doneLabels.includes(label)) {
+      return "Done";
+    }
   }
+  // all other issues go to UAT column
   return "UAT";
 }
 
