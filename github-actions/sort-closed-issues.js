@@ -14,9 +14,10 @@ function main({ g, c }) {
 
   /** if issue includes these labels there should be no visual changes and it should be moved to the Done column */
   const doneLabels = [
-    "role: back end",
+    "role: back end/devOps",
     "Feature: Analytics",
     "Feature: Refactor CSS",
+    "Feature: Refactor HTML",
     "Feature: Refactor JS / Liquid",
     "P-Feature: Home page",
   ];
