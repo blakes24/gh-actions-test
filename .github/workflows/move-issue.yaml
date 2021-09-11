@@ -9,11 +9,21 @@ on:
     types:
       - closed
 jobs:
-  move-assigned-card:
+  move-closed-issue:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Check Labels on Closed
+        uses: actions/github-script@v4
+        id: check-labels-closed
+        with:
+          script: |
+            const script = require('./github-actions/check-labels-closed.js')
+            const checkLabels = script({g: github, c: context})
+            return checkLabels
+          result-encoding: string
       - uses: alex-page/github-project-automation-plus@5bcba1c1c091a222584d10913e5c060d32c44044
         with:
           project: Project Board
-          column: Done
+          column: ${{ steps.check-labels-closed.outputs.result }}
           repo-token: ${{ secrets.ACCESS_TOKEN }}
