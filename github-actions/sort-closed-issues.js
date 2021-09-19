@@ -16,11 +16,19 @@ function main({ context }) {
 
   const labels = obtainLabels(context);
 
-  for (let label of labels) {
-    if (doneLabels.includes(label)) {
-      return "Done";
+  /** if issue includes one of the done labels there should be no visual changes - move to the Done column */
+  for (let doneLabel of doneLabels) {
+    if (labels.includes(doneLabel)) {
+      if (doneLabel !== "role: back end/devOps") {
+        return "Done";
+      }
+      // for 'role: back end/devOps' - only move to Done if there is no 'role: front end' label
+      if (!labels.includes("role: front end")) {
+        return "Done";
+      }
     }
   }
+
   // all other issues go to UAT column
   return "UAT";
 }
