@@ -4,29 +4,36 @@
  * @returns - returns an object with the action's result, which is passed on to the next action
  */
 function main({ context }) {
-  /** if issue includes these labels there should be no visual changes and it should be moved to the Done column */
-  const doneLabels = [
-    "role: back end/devOps",
-    "Feature: Analytics",
+  const hardLabels = [
     "Feature: Refactor CSS",
     "Feature: Refactor HTML",
     "Feature: Refactor JS / Liquid",
     "Feature: Refactor GHA",
   ];
 
-  const labels = obtainLabels(context);
+  const softLabels = ["role: back end/devOps", "Feature: Analytics"];
 
-  /** if issue includes one of the done labels there should be no visual changes - move to the Done column */
-  for (let doneLabel of doneLabels) {
-    if (labels.includes(doneLabel)) {
-      if (doneLabel !== "role: back end/devOps") {
-        return "Done";
-      }
-      // for 'role: back end/devOps' - only move to Done if there is no 'role: front end' label
-      if (!labels.includes("role: front end")) {
-        return "Done";
-      }
-    }
+  const overrideSoftLabels = ["role: front end"];
+
+  const issueLabels = obtainLabels(context);
+
+  const includesHardLabel = (item) => hardLabels.includes(item);
+  const includesSoftLabel = (item) => softLabels.includes(item);
+  const includesOverrideLabel = (item) => overrideSoftLabels.includes(item);
+
+  /** if issue includes hard labels there should be no visual changes - move to the Done column */
+  if (issueLabels.some(includesHardLabel)) {
+    return "Done";
+  }
+
+  /** if issue does not include a hard label, but does contain an override label - move to UAT */
+  if (issueLabels.some(includesOverrideLabel)) {
+    return "UAT";
+  }
+
+  /** if issue includes soft labels (no hard or override) - move to Done */
+  if (issueLabels.some(includesSoftLabel)) {
+    return "Done";
   }
 
   // all other issues go to UAT column
