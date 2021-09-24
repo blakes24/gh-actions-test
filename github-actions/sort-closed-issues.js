@@ -1,9 +1,14 @@
+const obtainLabels = require("./obtain-labels");
+
 /**
  * Check the labels of an issue, and return the column the issue should be sorted into when closed
- * @param {Object} context - context object
- * @returns - returns an object with the action's result, which is passed on to the next action
+ * @param {Object} context - context object from actions/github-script
+ * @returns - returns the appropriate column, which is passed on to the next action
  */
 function main({ context }) {
+  const doneColumn = "Done";
+  const UATColumn = "UAT";
+
   const hardLabels = [
     "Feature: Refactor CSS",
     "Feature: Refactor HTML",
@@ -17,37 +22,33 @@ function main({ context }) {
 
   const issueLabels = obtainLabels(context);
 
-  const includesHardLabel = (item) => hardLabels.includes(item);
-  const includesSoftLabel = (item) => softLabels.includes(item);
-  const includesOverrideLabel = (item) => overrideSoftLabels.includes(item);
+  function isHardLabel(label) {
+    return hardLabels.includes(label);
+  }
+  function isSoftLabel(label) {
+    return softLabels.includes(label);
+  }
+  function isOverrideLabel(label) {
+    return overrideSoftLabels.includes(label);
+  }
 
   /** if issue includes hard labels there should be no visual changes - move to the Done column */
-  if (issueLabels.some(includesHardLabel)) {
-    return "Done";
+  if (issueLabels.some(isHardLabel)) {
+    return doneColumn;
   }
 
   /** if issue does not include a hard label, but does contain an override label - move to UAT */
-  if (issueLabels.some(includesOverrideLabel)) {
-    return "UAT";
+  if (issueLabels.some(isOverrideLabel)) {
+    return UATColumn;
   }
 
   /** if issue includes soft labels (no hard or override) - move to Done */
-  if (issueLabels.some(includesSoftLabel)) {
-    return "Done";
+  if (issueLabels.some(isSoftLabel)) {
+    return doneColumn;
   }
 
   // all other issues go to UAT column
-  return "UAT";
-}
-
-/**
- * Get all labels from the issue
- * @return {Array} - returns an array of all the labels
- */
-function obtainLabels(context) {
-  const labelsObject = context.payload.issue.labels;
-  const labels = labelsObject.map((label) => label.name);
-  return labels;
+  return UATColumn;
 }
 
 module.exports = main;
