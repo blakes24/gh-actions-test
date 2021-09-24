@@ -22,28 +22,32 @@ function main({ context }) {
 
   const issueLabels = obtainLabels(context);
 
-  function isHardLabel(label) {
-    return hardLabels.includes(label);
-  }
-  function isSoftLabel(label) {
-    return softLabels.includes(label);
-  }
-  function isOverrideLabel(label) {
-    return overrideSoftLabels.includes(label);
+  function checkLabels(labelArray) {
+    return (label) => labelArray.includes(label);
   }
 
+  // function isHardLabel(label) {
+  //   return hardLabels.includes(label);
+  // }
+  // function isSoftLabel(label) {
+  //   return softLabels.includes(label);
+  // }
+  // function isOverrideLabel(label) {
+  //   return overrideSoftLabels.includes(label);
+  // }
+
   /** if issue includes hard labels there should be no visual changes - move to the Done column */
-  if (issueLabels.some(isHardLabel)) {
+  if (issueLabels.some(checkLabels(hardLabels))) {
     return doneColumn;
   }
 
   /** if issue does not include a hard label, but does contain an override label - move to UAT */
-  if (issueLabels.some(isOverrideLabel)) {
+  if (issueLabels.some(checkLabels(overrideSoftLabels))) {
     return UATColumn;
   }
 
   /** if issue includes soft labels (no hard or override) - move to Done */
-  if (issueLabels.some(isSoftLabel)) {
+  if (issueLabels.some(checkLabels(softLabels))) {
     return doneColumn;
   }
 
