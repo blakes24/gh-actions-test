@@ -25,6 +25,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          message: message: 'Error! Cannot find a linked issue associated with this PR, Please link your issue by adding Fixes #<issue number goes here>'
+          message: 'Error! Cannot find a linked issue associated with this PR, Please link your issue by adding Fixes #<issue number goes here>'
 
      
